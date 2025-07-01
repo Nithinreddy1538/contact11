@@ -1,0 +1,431 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form with Validation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f1f3fa 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            font-weight: 300;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            min-height: 20px;
+        }
+
+        .error-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .input-error {
+            border-color: #e74c3c !important;
+            background: #fdf2f2 !important;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.4s ease;
+            font-weight: 500;
+        }
+
+        .success-message.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .reset-btn {
+            width: 100%;
+            background: transparent;
+            color: #667eea;
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contact Us</h1>
+        <form id="contactForm">
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name">
+                <div class="error-message" id="nameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address">
+                <div class="error-message" id="emailError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message" placeholder="Enter your message here..."></textarea>
+                <div class="error-message" id="messageError"></div>
+            </div>
+
+            <button type="submit" class="submit-btn">Send Message</button>
+            <button type="button" class="reset-btn" id="resetBtn">Reset Form</button>
+        </form>
+
+        <div class="success-message" id="successMessage">
+            ✅ Thank you! Your message has been sent successfully. We'll get back to you soon.
+        </div>
+    </div>
+
+    <script>
+        // Get form elements
+        const form = document.getElementById('contactForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const messageInput = document.getElementById('message');
+        const resetBtn = document.getElementById('resetBtn');
+        const successMessage = document.getElementById('successMessage');
+
+        // Error message elements
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+        const messageError = document.getElementById('messageError');
+
+        // Email validation regex
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        // Validation functions
+        function validateName(name) {
+            if (!name.trim()) {
+                return "Name is required";
+            }
+            if (name.trim().length < 2) {
+                return "Name must be at least 2 characters long";
+            }
+            if (!/^[a-zA-Z\s'-]+$/.test(name.trim())) {
+                return "Name can only contain letters, spaces, hyphens, and apostrophes";
+            }
+            return "";
+        }
+
+        function validateEmail(email) {
+            if (!email.trim()) {
+                return "Email is required";
+            }
+            if (!emailRegex.test(email.trim())) {
+                return "Please enter a valid email address";
+            }
+            return "";
+        }
+
+        function validateMessage(message) {
+            if (!message.trim()) {
+                return "Message is required";
+            }
+            if (message.trim().length < 10) {
+                return "Message must be at least 10 characters long";
+            }
+            if (message.trim().length > 1000) {
+                return "Message must be less than 1000 characters";
+            }
+            return "";
+        }
+
+        // Show error function
+        function showError(errorElement, message, inputElement) {
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+            inputElement.classList.add('input-error');
+        }
+
+        // Clear error function
+        function clearError(errorElement, inputElement) {
+            errorElement.textContent = "";
+            errorElement.classList.remove('show');
+            inputElement.classList.remove('input-error');
+        }
+
+        // Real-time validation
+        nameInput.addEventListener('input', function() {
+            const error = validateName(this.value);
+            if (error) {
+                showError(nameError, error, this);
+            } else {
+                clearError(nameError, this);
+            }
+        });
+
+        emailInput.addEventListener('input', function() {
+            const error = validateEmail(this.value);
+            if (error) {
+                showError(emailError, error, this);
+            } else {
+                clearError(emailError, this);
+            }
+        });
+
+        messageInput.addEventListener('input', function() {
+            const error = validateMessage(this.value);
+            if (error) {
+                showError(messageError, error, this);
+            } else {
+                clearError(messageError, this);
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            
+            // Get form values
+            const name = nameInput.value;
+            const email = emailInput.value;
+            const message = messageInput.value;
+
+            // Validate all fields
+            const nameErrorMsg = validateName(name);
+            const emailErrorMsg = validateEmail(email);
+            const messageErrorMsg = validateMessage(message);
+
+            // Clear previous errors
+            clearError(nameError, nameInput);
+            clearError(emailError, emailInput);
+            clearError(messageError, messageInput);
+
+            // Show errors if any
+            let hasErrors = false;
+            
+            if (nameErrorMsg) {
+                showError(nameError, nameErrorMsg, nameInput);
+                hasErrors = true;
+            }
+            
+            if (emailErrorMsg) {
+                showError(emailError, emailErrorMsg, emailInput);
+                hasErrors = true;
+            }
+            
+            if (messageErrorMsg) {
+                showError(messageError, messageErrorMsg, messageInput);
+                hasErrors = true;
+            }
+
+            // If no errors, show success message
+            if (!hasErrors) {
+                // Hide form temporarily
+                form.style.opacity = '0.5';
+                
+                // Show success message
+                successMessage.classList.add('show');
+                
+                // Log form data (in real application, this would be sent to server)
+                console.log('Form submitted successfully!');
+                console.log('Name:', name.trim());
+                console.log('Email:', email.trim());
+                console.log('Message:', message.trim());
+                
+                // Reset form after 3 seconds
+                setTimeout(() => {
+                    form.reset();
+                    successMessage.classList.remove('show');
+                    form.style.opacity = '1';
+                }, 3000);
+            }
+        });
+
+        // Reset button functionality
+        resetBtn.addEventListener('click', function() {
+            // Reset form
+            form.reset();
+            
+            // Clear all errors
+            clearError(nameError, nameInput);
+            clearError(emailError, emailInput);
+            clearError(messageError, messageInput);
+            
+            // Hide success message
+            successMessage.classList.remove('show');
+            
+            // Focus on first input
+            nameInput.focus();
+        });
+
+        // Test edge cases function (for demonstration)
+        function testEdgeCases() {
+            console.log('Testing edge cases:');
+            
+            // Test empty inputs
+            console.log('Empty name:', validateName(''));
+            console.log('Empty email:', validateEmail(''));
+            console.log('Empty message:', validateMessage(''));
+            
+            // Test invalid email formats
+            console.log('Invalid email 1:', validateEmail('invalid'));
+            console.log('Invalid email 2:', validateEmail('test@'));
+            console.log('Invalid email 3:', validateEmail('@domain.com'));
+            
+            // Test special characters
+            console.log('Name with numbers:', validateName('John123'));
+            console.log('Name with special chars:', validateName("John O'Connor-Smith"));
+            
+            // Test message length
+            console.log('Short message:', validateMessage('Hi'));
+            console.log('Long message:', validateMessage('a'.repeat(1001)));
+        }
+
+        // Uncomment the line below to run edge case tests in console
+        // testEdgeCases();
+
+        // Focus on first input when page loads
+        window.addEventListener('load', function() {
+            nameInput.focus();
+        });
+    </script>
+</body>
+</html>
